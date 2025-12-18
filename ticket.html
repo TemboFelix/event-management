@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Ticket</title>
+    <style>
+   /* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8bde06;
+    text-align: center;
+}
+
+/* Header */
+header {
+    background-color: #1e88e5;
+    color: white;
+    padding: 20px;
+}
+
+button {
+    background-color: #1e88e5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #1565c0;
+}
+
+/* Ticket Display */
+.ticket-display {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ticket-card {
+    background-color: white;
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px #ccc;
+    text-align: center;
+}
+
+.ticket-card h2 {
+    margin-bottom: 15px;
+    color: #1e88e5;
+}
+
+.ticket-card p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* QR Code */
+#qrcode {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* BACK BUTTON */
+button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+/* Footer */
+.footer {
+    background-color: #1e88e5;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+} 
+</style>
+</head>
+<body>
+    <header>
+        <h1>Your Ticket</h1>
+        <button onclick="history.back()">← Back to Booking</button>
+    </header>
+
+    <main class="ticket-display">
+        <div class="ticket-card">
+            <h2 id="ticketEvent"></h2>
+            <p><strong>Name:</strong> <span id="ticketName"></span></p>
+            <p><strong>Email:</strong> <span id="ticketEmail"></span></p>
+            <canvas id="qrcode"></canvas>
+        </div>
+    </main>
+
+    
+<br>
+<button onclick="goBack()">⬅ Back</button>
+
+
+    <!-- QR Code library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        // ===== Ticket Page & QR Code =====
+if (document.getElementById('ticketEvent')) {
+    // Retrieve booking data from sessionStorage
+    const event = sessionStorage.getItem('event');
+    const name = sessionStorage.getItem('name');
+    const email = sessionStorage.getItem('email');
+
+    // Display booking info
+    document.getElementById('ticketEvent').innerText = event;
+    document.getElementById('ticketName').innerText = name;
+    document.getElementById('ticketEmail').innerText = email;
+
+    // Generate QR code with booking details
+    const qrText = `Event: ${event}\nName: ${name}\nEmail: ${email}`;
+    QRCode.toCanvas(document.getElementById('qrcode'), qrText, function(error) {
+        if (error) console.error(error);
+        console.log('QR code generated!');
+    });
+}
+
+    </script>
+    
+<footer class="footer">
+    <p>© 2025 Eventify. All Rights Reserved.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ticket</title>
+    <style>
+   /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #032ff7;
+    text-align: center;
+}
+
+header {
+    background-color: #1e88e5;
+    color: white;
+    padding: 20px;
+}
+
+button {
+    background-color: #1e88e5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #1565c0;
+}
+
+/* Booking Form */
+.booking-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+    text-align: left;
+}
+
+.booking-form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.booking-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.booking-form button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* BACK BUTTON */
+button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+/* Footer */
+.footer {
+    background-color: #1e88e5;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+</style>
+</head>
+<body>
+    
+    <header>
+        <h1>Book Your Ticket</h1>
+        <button onclick="history.back()">← Back to Events</button>
+    </header>
+
+    <main class="booking-form">
+        <form id="ticketForm">
+            <label>Event Name:</label>
+            <input type="text" id="eventName" readonly>
+
+            <label>Your Name:</label>
+            <input type="text" id="userName" placeholder="Enter your name" required>
+
+            <label>Email:</label>
+            <input type="email" id="userEmail" placeholder="Enter your email" required>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </main>
+
+
+<br>
+<button onclick="goBack()">⬅ Back</button>
+
+
+<script>
+   // ===== Booking Form Handling =====
+const form = document.getElementById('ticketForm');
+
+if (form) {
+    // Populate event name from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventName = urlParams.get('event');
+    document.getElementById('eventName').value = eventName;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Save booking info to sessionStorage
+        const name = document.getElementById('userName').value;
+        const email = document.getElementById('userEmail').value;
+
+        sessionStorage.setItem('event', eventName);
+        sessionStorage.setItem('name', name);
+        sessionStorage.setItem('email', email);
+
+        // Redirect to ticket page
+        window.location.href = 'ticket.html';
+    });
+}
+
+// ===== Ticket Page & QR Code =====
+if (document.getElementById('ticketEvent')) {
+    const event = sessionStorage.getItem('event');
+    const name = sessionStorage.getItem('name');
+    const email = sessionStorage.getItem('email');
+
+    document.getElementById('ticketEvent').innerText = event;
+    document.getElementById('ticketName').innerText = name;
+    document.getElementById('ticketEmail').innerText = email;
+
+    // Generate QR code
+    const qrText = `Event: ${event}\nName: ${name}\nEmail: ${email}`;
+    QRCode.toCanvas(document.getElementById('qrcode'), qrText, function(error) {
+        if (error) console.error(error);
+        console.log('QR code generated!');
+    });
+}
+</script>
+
+<footer class="footer">
+    <p>© 2025 Eventify. All Rights Reserved.</p>
+</footer>
+</body>
+</html>
